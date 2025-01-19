@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WiFlow</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
+    <string name="wiflow">WiFlow</string>
+    <string name="connection_info">Connection Info</string>
+</resources>
