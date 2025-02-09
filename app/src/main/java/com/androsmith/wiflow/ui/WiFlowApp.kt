@@ -5,27 +5,38 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.androsmith.wiflow.ui.navigation.Home
-import com.androsmith.wiflow.ui.navigation.Settings
+import com.androsmith.wiflow.ui.navigation.Screens
 import com.androsmith.wiflow.ui.screens.home.HomeScreen
 import com.androsmith.wiflow.ui.screens.settings.SettingsScreen
+import com.androsmith.wiflow.ui.screens.welcome.WelcomeScreen
 
 
 @Composable
-fun WiFlowApp(modifier: Modifier = Modifier) {
+fun WiFlowApp(
+    startDestination: Screens,
+    modifier: Modifier = Modifier
+) {
 
     val navController = rememberNavController()
     NavHost(
-        navController = navController, startDestination = Home
+        navController = navController, startDestination = startDestination
     ) {
-        composable<Home> {
-            HomeScreen(
-                onNavigateToSettings = { navController.navigate(Settings)}
-            )
+        composable<Screens.Welcome> {
+            WelcomeScreen(onNavigateToHome = {
+                navController.popBackStack()
+                navController.navigate(Screens.Home)
+            })
         }
-        composable<Settings> {
+        composable<Screens.Home> {
+            HomeScreen(onNavigateToSettings = { navController.navigate(Screens.Settings) })
+        }
+        composable<Screens.Settings> {
             SettingsScreen(
-                onNavigateBack = {navController.popBackStack()}
+                onNavigateBack = { navController.popBackStack() },
+                onInstructionPageClicked = {
+                    navController.popBackStack()
+
+                    navController.navigate(Screens.Welcome)}
             )
         }
     }

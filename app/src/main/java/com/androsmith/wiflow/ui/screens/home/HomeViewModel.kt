@@ -64,10 +64,12 @@ class HomeViewModel(
 
     fun toggleServer(context: Context) {
         if (_uiState.value.config.rootDirectory == FtpServerConfig().rootDirectory) {
-            _toastMessage.value = "Choose a directory from settings!"
+            _toastMessage.value = "Choose a directory!"
         }else {
             if (_uiState.value.isRunning) {
                 ftpServerManager.stop()
+                _toastMessage.value = "Server stopped!"
+
             } else {
                 getIpAddress()
                 ftpServerManager.start(_uiState.value.config)

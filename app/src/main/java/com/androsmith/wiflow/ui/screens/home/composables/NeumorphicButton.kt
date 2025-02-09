@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.androsmith.wiflow.R
@@ -101,20 +103,21 @@ fun NeumorphicButton(
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
-            .size(200.dp)
             .padding(padding)
             .clickable(
                 onClick = onClick,
                 indication = null,
                 interactionSource = interactionSource
-            )
+            ).semantics {
+                contentDescription = "Start / Stop server Button"
+            }
         ,
 
         ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .fillMaxSize()
+                .size(200.dp)
                 .shadow(
                     color = shadowColorTop,
                     offsetX = (0).dp,
@@ -146,27 +149,19 @@ fun NeumorphicButton(
                 )
 
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.size(56.dp),
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.size(56.dp),
 
-                    ) {
-                    Icon(
-                        painter = painterResource(R.drawable.flash),
-                        tint = color,
+                ) {
+                Icon(
+                    painter = painterResource(R.drawable.flash),
+                    tint = color,
 
-                        contentDescription = null,
+                    contentDescription = "Server state",
 
-                        modifier = Modifier.size(52.dp - padding),
-                    )
-                }
-//                Text(
-//                    "Start server"
-//                )
+                    modifier = Modifier.size(52.dp - padding),
+                )
             }
         }
     }

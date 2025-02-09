@@ -14,8 +14,8 @@ android {
         applicationId = "com.androsmith.wiflow"
         minSdk = 24
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0.0"
+        versionCode = 5
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -62,6 +62,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     // FTP Server
     implementation(libs.apache.ftpserver.core)
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
 
     implementation("androidx.documentfile:documentfile:1.0.1") // Or latest version
 

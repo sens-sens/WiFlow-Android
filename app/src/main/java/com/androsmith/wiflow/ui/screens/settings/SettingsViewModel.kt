@@ -1,7 +1,6 @@
 package com.androsmith.wiflow.ui.screens.settings
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -9,7 +8,6 @@ import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.Settings
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.ViewModel
@@ -20,7 +18,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.androsmith.wiflow.WiFlowApplication
 import com.androsmith.wiflow.data.UserPreferencesRepository
-import com.androsmith.wiflow.ui.screens.home.HomeViewModel
+import com.androsmith.wiflow.domain.FtpServerConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -56,6 +54,12 @@ class SettingsViewModel(
     private val _password = MutableStateFlow<String>("")
     val password: StateFlow<String> = _password
 
+    private var ftpServerConfig = FtpServerConfig()
+
+    init {
+        getConfig()
+    }
+
     fun changePassword(value: String) {
         _password.value = value
         viewModelScope.launch {
@@ -69,6 +73,16 @@ class SettingsViewModel(
         }
     }
 
+    fun getConfig() {
+        viewModelScope.launch {
+            userPreferencesRepository.ftpConfig.collect { newConfig ->
+                ftpServerConfig = newConfig
+
+                _username.value = ftpServerConfig.username
+                _password.value = ftpServerConfig.password
+            }
+        }
+    }
     fun chooseDirectory(context: android.content.Context) {
         viewModelScope.launch {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -87,6 +101,7 @@ class SettingsViewModel(
                         val intent = Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
                         _launchIntent.value = LaunchIntent.ManageStorageRequest(intent)
                     }
+
                 }
             } else {
                 val permissions = arrayOf(
@@ -108,12 +123,18 @@ class SettingsViewModel(
         }
     }
 
-    fun handleManageStorageResult(resultCode: Int) {
-        if (resultCode == Activity.RESULT_OK && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
-            _launchIntent.value =
-                LaunchIntent.OpenDirectoryIntent(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE))
+    fun handleManageStorageResult(resultCode: Int, context: android.content.Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Environment.isExternalStorageManager()) {
+                // Permission granted, launch the directory picker
+                _launchIntent.value = LaunchIntent.OpenDirectoryIntent(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE))
+            } else {
+                // Permission not granted, show a toast or handle the failure
+                _toastMessage.value = "Manage All Files Access permission is required to select a directory."
+            }
         }
     }
+
 
     fun handleStoragePermissionResult(permissions: Map<String, Boolean>) {
         if (permissions.all { it.value }) {

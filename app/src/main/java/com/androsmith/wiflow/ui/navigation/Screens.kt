@@ -2,8 +2,14 @@ package com.androsmith.wiflow.ui.navigation
 
 import kotlinx.serialization.Serializable
 
-@Serializable
-object Home
+sealed interface Screens {
 
-@Serializable
-object Settings
+    @Serializable
+    object Home: Screens
+
+    @Serializable
+    object Settings: Screens
+
+    @Serializable
+    object Welcome: Screens
+}

@@ -27,8 +27,8 @@ fun HomeAppBar(
     CenterAlignedTopAppBar(
         title = {
             Text(
-                stringResource(R.string.wiflow),
-                color = MaterialTheme.colorScheme.onBackground,
+                stringResource(R.string.app_name),
+
             )
         },
         actions = {

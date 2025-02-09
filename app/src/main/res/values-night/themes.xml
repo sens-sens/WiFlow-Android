@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.WiFlow" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="SplashTheme" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.WiFlow</item>
+    </style>
+
+    <style name="SplashTheme.Dark" parent="SplashTheme">
+        <item name="windowSplashScreenBackground">@color/black</item>
+    </style>
+</resources>

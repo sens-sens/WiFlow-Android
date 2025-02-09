@@ -35,6 +35,7 @@ import com.androsmith.wiflow.ui.screens.settings.composables.SettingsAppBar
 @Composable
 fun SettingsScreen(
     onNavigateBack: () -> Unit,
+    onInstructionPageClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val viewModel: SettingsViewModel = viewModel(
@@ -44,7 +45,7 @@ fun SettingsScreen(
 
     val manageStorageLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            viewModel.handleManageStorageResult(result.resultCode)
+            viewModel.handleManageStorageResult(result.resultCode, context)
         }
 
     val storagePermissionLauncher =
@@ -65,6 +66,7 @@ fun SettingsScreen(
 
     LaunchedEffect(launchIntent) {
         viewModel.launchIntent.value?.let { intent ->
+
             when (intent) {
                 is LaunchIntent.OpenDirectoryIntent -> openDirectoryLauncher.launch(intent.intent)
                 is PermissionRequest -> storagePermissionLauncher.launch(intent.permissions)
@@ -78,7 +80,7 @@ fun SettingsScreen(
     val passwordDialog = remember { mutableStateOf(false) }
 
     val username = viewModel.username.collectAsState()
-    val password = viewModel.username.collectAsState()
+    val password = viewModel.password.collectAsState()
 
 
 
@@ -137,7 +139,11 @@ fun SettingsScreen(
                 value = "Folder for creating FTP Server",
                 onClick = { viewModel.chooseDirectory(context) }
             )
-
+            SettingsTile(
+                title = "Instructions",
+                value = "Instruction guide for using the app",
+                onClick = onInstructionPageClicked
+            )
 
 
             viewModel.toastMessage.collectAsState().value?.let { message ->
