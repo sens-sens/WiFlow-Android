@@ -17,9 +17,9 @@ transfer.
 
 ## 📸 Screenshots
 
-| Home Screen              | Settings                         | Dynamic UI                      |
-|--------------------------|----------------------------------|---------------------------------|
-| ![Home](assets/home.png) | ![Settings](assets/settings.png) | ![Transfer](assets/dynamic.png) |
+| Home Screen                             | Settings                         | Dynamic UI                      |
+|-----------------------------------------|----------------------------------|---------------------------------|
+| <img src="assets/home.png" width="300"> | ![Settings](assets/settings.png) | ![Transfer](assets/dynamic.png) |
 
 ---
 
