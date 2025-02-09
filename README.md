@@ -1,4 +1,4 @@
-# WiFlow - Wi-Fi FTP Server 📂📡
+# WiFlow - Wi-Fi FTP Server ⚡
 
 ![WiFlow Banner](assets/banner.png)
 
@@ -27,7 +27,7 @@ transfer.
 
 ✅ **Wireless File Transfer** – Move files between devices over Wi-Fi.  
 ✅ **Full FTP Server** – Upload, download, rename, and delete files.  
-✅ **Access Internal & External Storage** – Manage all files in one place.  
+✅ **Access Internal Storage** – Manage all files in one place.  
 ✅ **Secure & Background Operation** – Keep the server running while using your phone.  
 ✅ **Lightweight & Fast** – Minimal resource usage with a simple UI.
 
@@ -37,7 +37,7 @@ transfer.
 
 WiFlow is available on **Google Play**:
 
-[![Google Play Badge](https://play.google.com/intl/en_us/badges/static/images/badge/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.androsmith.wiflow)
+[![Google Play Badge](assets/badge.png)](https://play.google.com/store/apps/details?id=com.androsmith.wiflow)
 
 ---
 
@@ -75,7 +75,7 @@ WiFlow is licensed under the **MIT License**.
 
 ## 📬 Contact
 
-Have feedback or questions? Reach out via [LinkedIn](https://www.linkedin.com/in/yourprofile) or
+Have feedback or questions? Reach out via [LinkedIn](https://www.linkedin.com/in/senthil-sens) or
 open an issue on GitHub.
 
 ---
