@@ -1,6 +1,6 @@
 # WiFlow - Wi-Fi FTP Server 📂📡
 
-![WiFlow Banner](https://via.placeholder.com/1200x400?text=WiFlow+-+WiFi+FTP+Server)
+![WiFlow Banner](assets/banner.png)
 
 ## 🚀 About WiFlow
 
@@ -17,9 +17,9 @@ transfer.
 
 ## 📸 Screenshots
 
-| Home Screen                                                   | Settings                                                       | File Transfer                                                       |
-|---------------------------------------------------------------|----------------------------------------------------------------|---------------------------------------------------------------------|
-| ![Home](https://via.placeholder.com/300x600?text=Home+Screen) | ![Settings](https://via.placeholder.com/300x600?text=Settings) | ![Transfer](https://via.placeholder.com/300x600?text=File+Transfer) |
+| Home Screen              | Settings                         | Dynamic UI                      |
+|--------------------------|----------------------------------|---------------------------------|
+| ![Home](assets/home.png) | ![Settings](assets/settings.png) | ![Transfer](assets/dynamic.png) |
 
 ---
 
