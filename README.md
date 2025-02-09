@@ -19,7 +19,7 @@ transfer.
 
 | Home Screen                                        | Settings                                                   | Dynamic UI                                          |
 |----------------------------------------------------|------------------------------------------------------------|-----------------------------------------------------|
-| <img src="assets/home.png" alt="Home" width="800"> | <img src="assets/settings.png" alt="Settings" width="790"> | <img src="assets/dynamic.png" alt="UI" width="780"> |
+| <img src="assets/home.png" alt="Home" width="800"> | <img src="assets/settings.png" alt="Settings" width="780"> | <img src="assets/dynamic.png" alt="UI" width="760"> |
 
 ---
 
