@@ -26,6 +26,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -55,6 +56,8 @@ fun ConnectionInfoCard(
     username: String,
     password: String,
     isRunning: Boolean,
+    isAnonymousEnabled: Boolean,
+    onToggleAnonymous: (Boolean) -> Unit,
     onChooseDirectory: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -134,7 +137,7 @@ fun ConnectionInfoCard(
                             visible = isRunning
                         ) {
                             InfoTile(
-                                title = "Address",
+                                title = stringResource(R.string.address),
                                 value = serverAddress,
                                 action = {
                                     IconButton(
@@ -145,7 +148,7 @@ fun ConnectionInfoCard(
                                             clipboardManager.setClip(clipEntry)
 
                                             Toast.makeText(
-                                                context, "Copied server address", Toast.LENGTH_SHORT
+                                                context, context.getString(R.string.copied_address), Toast.LENGTH_SHORT
                                             ).show()
 
                                         },
@@ -154,7 +157,7 @@ fun ConnectionInfoCard(
                                         ) {
                                         Icon(
                                             painter = painterResource(R.drawable.copy),
-                                            contentDescription = "Copy server address",
+                                            contentDescription = stringResource(R.string.copy_address_desc),
                                             modifier = Modifier.size(22.dp)
 
                                         )
@@ -165,8 +168,21 @@ fun ConnectionInfoCard(
                         }
 
                         InfoTile(
-                            title = "Username",
-                            value = username,
+                            title = stringResource(R.string.anonymous_login),
+                            value = if (isAnonymousEnabled) stringResource(R.string.enabled) else stringResource(R.string.disabled),
+                            action = {
+                                Switch(
+                                    checked = isAnonymousEnabled,
+                                    onCheckedChange = onToggleAnonymous,
+                                    enabled = !isRunning,
+                                    modifier = Modifier.padding(start = 8.dp)
+                                )
+                            }
+                        )
+
+                        InfoTile(
+                            title = stringResource(R.string.username),
+                            value = if (isAnonymousEnabled) "anonymous" else username,
 
 
                             )
@@ -174,28 +190,32 @@ fun ConnectionInfoCard(
 
 
                         InfoTile(
-                            title = "Password",
-                            value = if (isHidden.value) "* * * * * * *" else password,
+                            title = stringResource(R.string.password),
+                            value = if (isAnonymousEnabled) "---" else if (isHidden.value) "* * * * * * *" else password,
                             action = {
-                                IconButton(
-                                    onClick = {
-                                        isHidden.value = !isHidden.value
-                                    },
+                                if (!isAnonymousEnabled) {
+                                    IconButton(
+                                        onClick = {
+                                            isHidden.value = !isHidden.value
+                                        },
 
-                                    ) {
-                                    Icon(
-                                        if (isHidden.value) painterResource(R.drawable.eye_closed_svgrepo_com)
-                                        else painterResource(R.drawable.eye_open_svgrepo_com),
-                                        contentDescription = if (isHidden.value) "Show password" else "Hide passwodr",
-                                        modifier = Modifier
-                                            .size(24.dp)
-                                    )
+                                        ) {
+                                        Icon(
+                                            if (isHidden.value) painterResource(R.drawable.eye_closed_svgrepo_com)
+                                            else painterResource(R.drawable.eye_open_svgrepo_com),
+                                            contentDescription = if (isHidden.value) stringResource(
+                                                R.string.show_password_desc
+                                            ) else stringResource(R.string.hide_password_desc),
+                                            modifier = Modifier
+                                                .size(24.dp)
+                                        )
+                                    }
                                 }
                             }
                         )
 
                         InfoTile(
-                            title = "Directory", value = directory,
+                            title = stringResource(R.string.directory), value = directory,
                             action = {
                                 IconButton(
                                     onClick = {
@@ -206,7 +226,7 @@ fun ConnectionInfoCard(
                                     ) {
                                     Icon(
                                         painter = painterResource(R.drawable.right_2_svgrepo_com),
-                                        contentDescription = "Choose directory",
+                                        contentDescription = stringResource(R.string.choose_directory_desc),
                                         modifier = Modifier
                                             .size(24.dp)
 
