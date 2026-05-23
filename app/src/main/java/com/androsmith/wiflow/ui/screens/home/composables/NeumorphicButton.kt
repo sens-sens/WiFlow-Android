@@ -40,6 +40,7 @@ import com.androsmith.wiflow.ui.theme.Gray20
 import com.androsmith.wiflow.ui.theme.Gray10
 import com.androsmith.wiflow.ui.theme.Gray80
 import com.androsmith.wiflow.ui.theme.Gray90
+import com.androsmith.wiflow.ui.theme.LocalIsDarkTheme
 
 import androidx.compose.ui.res.stringResource
 
@@ -64,7 +65,7 @@ fun NeumorphicButton(
     val blue = Color(0xFF539CE5)
     var blueGlow = Color(0xFF79B2EC)
 
-    if (isSystemInDarkTheme()){
+    if (LocalIsDarkTheme.current){
         primaryColor = Gray80
         primaryColorDim = Gray90
 

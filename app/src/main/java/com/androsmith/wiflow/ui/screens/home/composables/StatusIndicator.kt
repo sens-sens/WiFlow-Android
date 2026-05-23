@@ -22,13 +22,14 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.res.stringResource
 import com.androsmith.wiflow.R
 import com.androsmith.wiflow.domain.FtpServerState
+import com.androsmith.wiflow.ui.theme.LocalIsDarkTheme
 
 @Composable
 fun StatusIndicator(
     serverState: FtpServerState,
     modifier: Modifier = Modifier
 ) {
-    val isDark = isSystemInDarkTheme()
+    val isDark = LocalIsDarkTheme.current
 
     val backgroundColor = when (serverState) {
         is FtpServerState.Running -> MaterialTheme.colorScheme.tertiaryContainer
