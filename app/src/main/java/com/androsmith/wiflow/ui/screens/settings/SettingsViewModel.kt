@@ -54,12 +54,21 @@ class SettingsViewModel(
     private val _password = MutableStateFlow<String>("")
     val password: StateFlow<String> = _password
 
+    private val _deviceName = MutableStateFlow<String>("")
+    val deviceName: StateFlow<String> = _deviceName
+
     private var ftpServerConfig = FtpServerConfig()
 
     init {
         getConfig()
     }
 
+    fun changeDeviceName(value: String) {
+        _deviceName.value = value
+        viewModelScope.launch {
+            userPreferencesRepository.updateDeviceName(value)
+        }
+    }
     fun changePassword(value: String) {
         _password.value = value
         viewModelScope.launch {
@@ -80,6 +89,7 @@ class SettingsViewModel(
 
                 _username.value = ftpServerConfig.username
                 _password.value = ftpServerConfig.password
+                _deviceName.value = ftpServerConfig.deviceName
             }
         }
     }

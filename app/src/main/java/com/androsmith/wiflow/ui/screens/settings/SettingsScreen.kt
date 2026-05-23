@@ -5,20 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -78,9 +65,11 @@ fun SettingsScreen(
 
     val usernameDialog = remember { mutableStateOf(false) }
     val passwordDialog = remember { mutableStateOf(false) }
+    val deviceNameDialog = remember { mutableStateOf(false) }
 
-    val username = viewModel.username.collectAsState()
-    val password = viewModel.password.collectAsState()
+    val username by viewModel.username.collectAsState()
+    val password by viewModel.password.collectAsState()
+    val deviceName by viewModel.deviceName.collectAsState()
 
 
 
@@ -104,7 +93,7 @@ fun SettingsScreen(
             EditTextDialog(
                 showDialog = usernameDialog.value,
                 label = stringResource(R.string.username_label),
-                currentValue = username.value,
+                currentValue = username,
                 onDismissRequest = { usernameDialog.value = false },
                 onValueChange = { newUsername ->
                     viewModel.changeUsername(newUsername)
@@ -114,10 +103,20 @@ fun SettingsScreen(
             EditTextDialog(
                 showDialog = passwordDialog.value,
                 label = stringResource(R.string.password_label),
-                currentValue = password.value,
+                currentValue = password,
                 onDismissRequest = { passwordDialog.value = false },
                 onValueChange = { newPassword ->
                     viewModel.changePassword(newPassword)
+                }
+            )
+
+            EditTextDialog(
+                showDialog = deviceNameDialog.value,
+                label = stringResource(R.string.device_name),
+                currentValue = deviceName,
+                onDismissRequest = { deviceNameDialog.value = false },
+                onValueChange = { newName ->
+                    viewModel.changeDeviceName(newName)
                 }
             )
 
@@ -132,6 +131,12 @@ fun SettingsScreen(
                 title = stringResource(R.string.password),
                 value = stringResource(R.string.password_desc),
                 onClick = { passwordDialog.value = true }
+            )
+
+            SettingsTile(
+                title = stringResource(R.string.device_name),
+                value = stringResource(R.string.device_name_desc),
+                onClick = { deviceNameDialog.value = true }
             )
 
             SettingsTile(
@@ -259,5 +264,3 @@ fun EditTextDialog(
         }
     }
 }
-
-

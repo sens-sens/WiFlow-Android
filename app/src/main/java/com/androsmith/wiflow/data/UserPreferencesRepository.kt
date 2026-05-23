@@ -37,7 +37,8 @@ class UserPreferencesRepository(
                 ?: defaultConfig.rootDirectory,
             isAnonymousEnabled = preferences[DataStoreKeys.IS_ANONYMOUS_ENABLED]
                 ?: defaultConfig.isAnonymousEnabled,
-            port = preferences[DataStoreKeys.PORT] ?: defaultConfig.port
+            port = preferences[DataStoreKeys.PORT] ?: defaultConfig.port,
+            deviceName = preferences[DataStoreKeys.DEVICE_NAME] ?: defaultConfig.deviceName
         )
     }
 
@@ -48,6 +49,13 @@ class UserPreferencesRepository(
             preferences[DataStoreKeys.ROOT_DIRECTORY] = config.rootDirectory
             preferences[DataStoreKeys.IS_ANONYMOUS_ENABLED] = config.isAnonymousEnabled
             preferences[DataStoreKeys.PORT] = config.port
+            preferences[DataStoreKeys.DEVICE_NAME] = config.deviceName
+        }
+    }
+
+    suspend fun updateDeviceName(name: String) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreKeys.DEVICE_NAME] = name
         }
     }
 

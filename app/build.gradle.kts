@@ -81,6 +81,7 @@ dependencies {
     implementation("org.apache.ftpserver:ftpserver-core:1.2.0")
     implementation("org.apache.ftpserver:ftplet-api:1.2.0")
     implementation("org.apache.mina:mina-core:2.1.6")
+    implementation("org.jmdns:jmdns:3.5.8")
 
     testImplementation(libs.junit)
 

@@ -10,4 +10,5 @@ object DataStoreKeys {
     val ROOT_DIRECTORY = stringPreferencesKey("root_directory")
     val IS_ANONYMOUS_ENABLED = booleanPreferencesKey("is_anonymous_enabled")
     val PORT = intPreferencesKey("port")
+    val DEVICE_NAME = stringPreferencesKey("device_name")
 }

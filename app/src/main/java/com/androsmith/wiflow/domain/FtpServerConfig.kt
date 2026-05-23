@@ -6,4 +6,5 @@ data class FtpServerConfig(
     val rootDirectory: String = "/storage/emulated/0/",
     val port: Int = 2221,
     val isAnonymousEnabled: Boolean = false,
+    val deviceName: String = "wiflow"
 )
