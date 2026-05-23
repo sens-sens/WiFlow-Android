@@ -7,8 +7,10 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.androsmith.wiflow.MainActivity
 import com.androsmith.wiflow.R
@@ -20,6 +22,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import java.net.InetAddress
+import javax.jmdns.JmDNS
+import javax.jmdns.ServiceInfo
 
 class FtpService : Service() {
 
@@ -27,6 +34,10 @@ class FtpService : Service() {
     private lateinit var ftpServerManager: FtpServerManager
     private lateinit var ftpStateRepository: FtpStateRepository
     private lateinit var userPreferencesRepository: com.androsmith.wiflow.data.UserPreferencesRepository
+    
+    private var jmDNS: JmDNS? = null
+    private var multicastLock: WifiManager.MulticastLock? = null
+    private val mutex = Mutex()
 
     override fun onCreate() {
         super.onCreate()
@@ -47,25 +58,91 @@ class FtpService : Service() {
 
     private fun startServer() {
         serviceScope.launch {
-            val config = userPreferencesRepository.ftpConfig.first()
-            val ip = NetworkUtils.getLocalIpAddress() ?: "127.0.0.1"
-            val port = NetworkUtils.findFreePort()
+            mutex.withLock {
+                if (ftpStateRepository.serverState.value !is FtpServerState.Stopped) {
+                    Log.d(TAG, "Server not stopped, skipping start")
+                    return@withLock
+                }
+                
+                ftpStateRepository.updateState(FtpServerState.Starting)
+                
+                val config = userPreferencesRepository.ftpConfig.first()
+                Log.d(TAG, "Starting server with device name: ${config.deviceName}")
+                
+                val ip = NetworkUtils.getLocalIpAddress() ?: "127.0.0.1"
+                val port = NetworkUtils.findFreePort()
 
-            val updatedConfig = config.copy(port = port)
-            ftpServerManager.start(updatedConfig)
+                val updatedConfig = config.copy(port = port)
+                ftpServerManager.start(updatedConfig)
 
-            val state = FtpServerState.Running(ip, port)
-            ftpStateRepository.updateState(state)
+                startMdns(ip, config.deviceName, port)
 
-            startForeground(NOTIFICATION_ID, createNotification(state.address))
+                val state = FtpServerState.Running(ip, port, config.deviceName)
+                ftpStateRepository.updateState(state)
+
+                startForeground(NOTIFICATION_ID, createNotification(state.address))
+            }
+        }
+    }
+
+    private fun startMdns(ip: String, deviceName: String, port: Int) {
+        try {
+            val wifiManager = getSystemService(Context.WIFI_SERVICE) as WifiManager
+            multicastLock = wifiManager.createMulticastLock("wiflow_mdns_lock").apply {
+                setReferenceCounted(true)
+                acquire()
+            }
+
+            val address = InetAddress.getByName(ip)
+            jmDNS = JmDNS.create(address, deviceName)
+            
+            val serviceInfo = ServiceInfo.create(
+                "_ftp._tcp.local.",
+                deviceName,
+                port,
+                "path=/"
+            )
+            jmDNS?.registerService(serviceInfo)
+            Log.d(TAG, "mDNS registered: $deviceName.local on port $port")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error starting mDNS: ${e.message}", e)
         }
     }
 
     private fun stopServer() {
-        ftpServerManager.stop()
-        ftpStateRepository.updateState(FtpServerState.Stopped)
-        stopForeground(STOP_FOREGROUND_REMOVE)
-        stopSelf()
+        serviceScope.launch {
+            mutex.withLock {
+                if (ftpStateRepository.serverState.value is FtpServerState.Stopped) {
+                    Log.d(TAG, "Server already stopped, skipping stop")
+                    return@withLock
+                }
+                
+                ftpStateRepository.updateState(FtpServerState.Stopping)
+                ftpServerManager.stop()
+                stopMdns()
+                ftpStateRepository.updateState(FtpServerState.Stopped)
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            }
+        }
+    }
+
+    private fun stopMdns() {
+        try {
+            jmDNS?.unregisterAllServices()
+            jmDNS?.close()
+            jmDNS = null
+            
+            multicastLock?.let {
+                if (it.isHeld) {
+                    it.release()
+                }
+            }
+            multicastLock = null
+            Log.d(TAG, "mDNS stopped")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error stopping mDNS: ${e.message}", e)
+        }
     }
 
     override fun onDestroy() {
@@ -117,5 +194,6 @@ class FtpService : Service() {
         const val ACTION_STOP = "com.androsmith.wiflow.ACTION_STOP"
         private const val CHANNEL_ID = "ftp_server_channel"
         private const val NOTIFICATION_ID = 1
+        private const val TAG = "FtpService"
     }
 }
