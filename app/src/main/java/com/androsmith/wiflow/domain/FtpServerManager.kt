@@ -2,6 +2,7 @@ package com.androsmith.wiflow.domain
 
 import android.util.Log
 import com.androsmith.wiflow.utils.NetworkUtils
+import org.apache.ftpserver.ConnectionConfigFactory
 import org.apache.ftpserver.FtpServer
 import org.apache.ftpserver.FtpServerFactory
 import org.apache.ftpserver.ftplet.UserManager
@@ -27,8 +28,10 @@ class FtpServerManager {
 
     fun stop() {
         try {
-            server.stop()
-            Log.d(TAG, "Server stopped")
+            if (::server.isInitialized) {
+                server.stop()
+                Log.d(TAG, "Server stopped")
+            }
         } catch (e: Exception) {
             Log.e(TAG, "Error stopping server: ${e.message}", e)
         }
@@ -41,6 +44,12 @@ class FtpServerManager {
         return FtpServerFactory().apply {
             this.userManager = userManager
             addListener("default", listener)
+            
+            if (config.isAnonymousEnabled) {
+                val connectionConfigFactory = ConnectionConfigFactory()
+                connectionConfigFactory.isAnonymousLoginEnabled = true
+                this.connectionConfig = connectionConfigFactory.createConnectionConfig()
+            }
         }.createServer()
     }
 
@@ -55,6 +64,15 @@ class FtpServerManager {
             authorities = listOf(WritePermission())
         }
         userManager.save(user)
+
+        if (config.isAnonymousEnabled) {
+            val anonymousUser = BaseUser().apply {
+                name = "anonymous"
+                homeDirectory = config.rootDirectory
+                authorities = listOf(WritePermission())
+            }
+            userManager.save(anonymousUser)
+        }
 
         return userManager
     }
