@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.androsmith.wiflow.R
+import com.androsmith.wiflow.domain.FtpServerState
 import com.androsmith.wiflow.ui.screens.home.composables.ConnectionInfoCard
 import com.androsmith.wiflow.ui.screens.home.composables.HomeAppBar
 import com.androsmith.wiflow.ui.screens.home.composables.NeumorphicButton
@@ -110,16 +111,20 @@ fun HomeScreen(
         ) {
 
             StatusIndicator(
-                enabled = uiState.isRunning,
+                serverState = uiState.serverState,
                 modifier = Modifier.padding(vertical = 28.dp),
             )
 
+            val isTransitioning = uiState.serverState is FtpServerState.Starting || uiState.serverState is FtpServerState.Stopping
+
             NeumorphicButton(
                 onClick = {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !uiState.isRunning) {
-                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                    } else {
-                        homeViewModel.toggleServer(context)
+                    if (!isTransitioning) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !uiState.isRunning) {
+                            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        } else {
+                            homeViewModel.toggleServer(context)
+                        }
                     }
                 },
                 pressed = uiState.isRunning,
@@ -135,6 +140,7 @@ fun HomeScreen(
                 serverAddress = uiState.address,
                 isRunning = uiState.isRunning,
                 isAnonymousEnabled = uiState.config.isAnonymousEnabled,
+                deviceName = uiState.activeDeviceName,
                 onToggleAnonymous = { homeViewModel.toggleAnonymousAccess(it) },
                 directory = uiState.config.rootDirectory.replace(
                     "/storage/emulated/0",""

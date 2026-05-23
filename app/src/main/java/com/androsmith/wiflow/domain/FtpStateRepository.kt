@@ -6,7 +6,9 @@ import kotlinx.coroutines.flow.asStateFlow
 
 sealed class FtpServerState {
     object Stopped : FtpServerState()
-    data class Running(val ip: String, val port: Int) : FtpServerState() {
+    object Starting : FtpServerState()
+    object Stopping : FtpServerState()
+    data class Running(val ip: String, val port: Int, val deviceName: String) : FtpServerState() {
         val address: String get() = "ftp://$ip:$port"
     }
 }

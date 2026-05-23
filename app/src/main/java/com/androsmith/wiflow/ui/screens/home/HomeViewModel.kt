@@ -51,14 +51,29 @@ class HomeViewModel(
                         is FtpServerState.Running -> {
                             currentState.copy(
                                 isRunning = true,
+                                serverState = serverState,
                                 address = serverState.address,
-                                ipAddress = serverState.ip
+                                ipAddress = serverState.ip,
+                                activeDeviceName = serverState.deviceName
                             )
                         }
                         FtpServerState.Stopped -> {
                             currentState.copy(
                                 isRunning = false,
+                                serverState = serverState,
                                 address = ""
+                            )
+                        }
+                        FtpServerState.Starting -> {
+                            currentState.copy(
+                                isRunning = false,
+                                serverState = serverState
+                            )
+                        }
+                        FtpServerState.Stopping -> {
+                            currentState.copy(
+                                isRunning = true,
+                                serverState = serverState
                             )
                         }
                     }
@@ -75,7 +90,14 @@ class HomeViewModel(
         viewModelScope.launch {
             userPreferencesRepository.ftpConfig.collect { newConfig ->
                 _uiState.update { currentState ->
-                    currentState.copy(config = newConfig)
+                    currentState.copy(
+                        config = newConfig,
+                        // Update activeDeviceName if server is NOT running
+                        activeDeviceName = if (!currentState.isRunning && currentState.serverState is FtpServerState.Stopped) 
+                            newConfig.deviceName 
+                        else 
+                            currentState.activeDeviceName
+                    )
                 }
             }
         }
@@ -100,20 +122,25 @@ class HomeViewModel(
         if (_uiState.value.config.rootDirectory == FtpServerConfig().rootDirectory) {
             _toastMessage.value = context.getString(R.string.choose_directory_toast)
         } else {
+            val isRunning = _uiState.value.isRunning
+            val state = _uiState.value.serverState
+
+            if (state is FtpServerState.Starting || state is FtpServerState.Stopping) return
+
             val intent = Intent(context, FtpService::class.java).apply {
-                action = if (_uiState.value.isRunning) {
+                action = if (isRunning) {
                     FtpService.ACTION_STOP
                 } else {
                     FtpService.ACTION_START
                 }
             }
 
-            if (_uiState.value.isRunning) {
-                context.startService(intent)
+            if (isRunning) {
                 _toastMessage.value = context.getString(R.string.server_stopping_toast)
+                context.startService(intent)
             } else {
-                context.startForegroundService(intent)
                 _toastMessage.value = context.getString(R.string.server_starting_toast)
+                context.startForegroundService(intent)
             }
         }
     }

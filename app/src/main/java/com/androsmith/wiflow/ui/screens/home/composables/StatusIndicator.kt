@@ -18,93 +18,59 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.res.stringResource
 import com.androsmith.wiflow.R
+import com.androsmith.wiflow.domain.FtpServerState
 
 @Composable
 fun StatusIndicator(
-    enabled: Boolean,
+    serverState: FtpServerState,
     modifier: Modifier = Modifier
 ) {
+    val isDark = isSystemInDarkTheme()
 
-
-
-
-    if (enabled) {
-        Box(
-            modifier = modifier
-                .clip(
-                    shape = CircleShape
-                )
-                .background(
-                    color = MaterialTheme
-                        .colorScheme
-                        .tertiaryContainer
-                ).
-                padding(vertical = 12.dp, horizontal = 20.dp)
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier.size(8.dp)
-
-                        .clip(
-                            shape = CircleShape
-                        )
-                        .background(
-                            color = MaterialTheme
-                                .colorScheme
-                                .onTertiaryContainer
-                        )
-                )
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.server_running),
-                    color = MaterialTheme
-                        .colorScheme
-                        .onTertiaryContainer
-                )
-            }
-        }
-    } else {
-            Box(
-                modifier = modifier
-                    .clip(
-                        shape = CircleShape
-                    )
-                    .background(
-                        color = MaterialTheme
-                            .colorScheme
-                            .errorContainer
-                    ).
-                    padding(vertical = 12.dp, horizontal = 20.dp)
-            ) {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier.size(8.dp)
-
-                            .clip(
-                                shape = CircleShape
-                            )
-                            .background(
-                                color = MaterialTheme
-                                    .colorScheme
-                                    .onErrorContainer
-                            )
-                    )
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.server_stopped),
-                        color = MaterialTheme
-                            .colorScheme
-                            .onErrorContainer
-                    )
-                }
+    val backgroundColor = when (serverState) {
+        is FtpServerState.Running -> MaterialTheme.colorScheme.tertiaryContainer
+        FtpServerState.Stopped -> MaterialTheme.colorScheme.errorContainer
+        FtpServerState.Starting, FtpServerState.Stopping -> if (isDark) Color(0xFF663300) else Color(0xFFFFE0B2)
     }
 
+    val contentColor = when (serverState) {
+        is FtpServerState.Running -> MaterialTheme.colorScheme.onTertiaryContainer
+        FtpServerState.Stopped -> MaterialTheme.colorScheme.onErrorContainer
+        FtpServerState.Starting, FtpServerState.Stopping -> if (isDark) Color(0xFFFFCC80) else Color(0xFFE65100)
+    }
+
+    val statusText = when (serverState) {
+        is FtpServerState.Running -> stringResource(R.string.server_running)
+        FtpServerState.Stopped -> stringResource(R.string.server_stopped)
+        FtpServerState.Starting -> stringResource(R.string.server_starting)
+        FtpServerState.Stopping -> stringResource(R.string.server_stopping)
+    }
+
+    Box(
+        modifier = modifier
+            .clip(shape = CircleShape)
+            .background(color = backgroundColor)
+            .padding(vertical = 12.dp, horizontal = 20.dp)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(8.dp)
+                    .clip(shape = CircleShape)
+                    .background(color = contentColor)
+            )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = statusText,
+                color = contentColor
+            )
+        }
     }
 }
 
