@@ -80,7 +80,8 @@ class FtpService : Service() {
                 val state = FtpServerState.Running(ip, port, config.deviceName)
                 ftpStateRepository.updateState(state)
 
-                startForeground(NOTIFICATION_ID, createNotification(state.address))
+                val friendlyAddress = "ftp://${config.deviceName}.local:$port"
+                startForeground(NOTIFICATION_ID, createRunningNotification(friendlyAddress))
             }
         }
     }
@@ -112,12 +113,16 @@ class FtpService : Service() {
     private fun stopServer() {
         serviceScope.launch {
             mutex.withLock {
-                if (ftpStateRepository.serverState.value is FtpServerState.Stopped) {
-                    Log.d(TAG, "Server already stopped, skipping stop")
+                if (ftpStateRepository.serverState.value is FtpServerState.Stopped || 
+                    ftpStateRepository.serverState.value is FtpServerState.Stopping) {
+                    Log.d(TAG, "Server already stopping or stopped, skipping stop")
                     return@withLock
                 }
                 
                 ftpStateRepository.updateState(FtpServerState.Stopping)
+                // Immediate feedback in notification
+                updateNotification(createStoppingNotification())
+                
                 ftpServerManager.stop()
                 stopMdns()
                 ftpStateRepository.updateState(FtpServerState.Stopped)
@@ -166,7 +171,12 @@ class FtpService : Service() {
         }
     }
 
-    private fun createNotification(ftpAddress: String): Notification {
+    private fun updateNotification(notification: Notification) {
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        manager.notify(NOTIFICATION_ID, notification)
+    }
+
+    private fun createRunningNotification(ftpAddress: String): Notification {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent, PendingIntent.FLAG_IMMUTABLE
@@ -182,11 +192,25 @@ class FtpService : Service() {
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(getString(R.string.notification_title))
             .setContentText(getString(R.string.notification_text, ftpAddress))
-            .setSmallIcon(R.drawable.wifi) // Using existing wifi icon
+            .setSmallIcon(R.drawable.wifi)
             .setContentIntent(pendingIntent)
             .setOngoing(true)
             .addAction(0, getString(R.string.stop), stopPendingIntent)
             .build()
+    }
+
+    private fun createStoppingNotification(): Notification {
+        val intent = Intent(this, MainActivity::class.java)
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle(getString(R.string.notification_stopping))
+            .setSmallIcon(R.drawable.wifi)
+            .setContentIntent(pendingIntent)
+            .setOngoing(true)
+            .build() // No stop action button here
     }
 
     companion object {
