@@ -11,4 +11,5 @@ object DataStoreKeys {
     val IS_ANONYMOUS_ENABLED = booleanPreferencesKey("is_anonymous_enabled")
     val PORT = intPreferencesKey("port")
     val DEVICE_NAME = stringPreferencesKey("device_name")
+    val THEME_MODE = stringPreferencesKey("theme_mode")
 }

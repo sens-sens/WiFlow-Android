@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import com.androsmith.wiflow.data.datastore.DataStoreKeys
+import com.androsmith.wiflow.domain.AppTheme
 import com.androsmith.wiflow.domain.FtpServerConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -20,6 +21,28 @@ class UserPreferencesRepository(
 ) {
 
     val defaultConfig = FtpServerConfig()
+
+    val appTheme: Flow<AppTheme> = dataStore.data.catch {
+        if (it is IOException) {
+            Log.e(TAG, "Error reading preferences.", it)
+            emit(emptyPreferences())
+        } else {
+            throw it
+        }
+    }.map { preferences ->
+        val themeName = preferences[DataStoreKeys.THEME_MODE] ?: AppTheme.SYSTEM.name
+        try {
+            AppTheme.valueOf(themeName)
+        } catch (e: IllegalArgumentException) {
+            AppTheme.SYSTEM
+        }
+    }
+
+    suspend fun updateTheme(theme: AppTheme) {
+        dataStore.edit { preferences ->
+            preferences[DataStoreKeys.THEME_MODE] = theme.name
+        }
+    }
 
     val ftpConfig: Flow<FtpServerConfig> = dataStore.data.catch {
         if (it is IOException) {

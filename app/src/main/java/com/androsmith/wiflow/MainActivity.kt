@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.androsmith.wiflow.ui.WiFlowApp
 import com.androsmith.wiflow.ui.theme.WiFlowTheme
@@ -29,7 +30,9 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            WiFlowTheme {
+            val themeMode by viewModel.themeMode.collectAsState()
+            
+            WiFlowTheme(appTheme = themeMode) {
                 Surface {
 
                     val startDestination = viewModel.startDestination.collectAsState()

@@ -5,18 +5,22 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.androsmith.wiflow.R
+import com.androsmith.wiflow.domain.AppTheme
 import com.androsmith.wiflow.ui.screens.settings.composables.SettingsAppBar
 
 @Composable
@@ -66,10 +70,12 @@ fun SettingsScreen(
     val usernameDialog = remember { mutableStateOf(false) }
     val passwordDialog = remember { mutableStateOf(false) }
     val deviceNameDialog = remember { mutableStateOf(false) }
+    val themeDialog = remember { mutableStateOf(false) }
 
     val username by viewModel.username.collectAsState()
     val password by viewModel.password.collectAsState()
     val deviceName by viewModel.deviceName.collectAsState()
+    val currentTheme by viewModel.currentTheme.collectAsState()
 
 
 
@@ -120,6 +126,15 @@ fun SettingsScreen(
                 }
             )
 
+            ThemeSelectionDialog(
+                showDialog = themeDialog.value,
+                currentTheme = currentTheme,
+                onDismissRequest = { themeDialog.value = false },
+                onThemeSelected = { newTheme ->
+                    viewModel.updateTheme(newTheme)
+                }
+            )
+
 
             SettingsTile(
                 title = stringResource(R.string.username),
@@ -137,6 +152,16 @@ fun SettingsScreen(
                 title = stringResource(R.string.device_name),
                 value = stringResource(R.string.device_name_desc),
                 onClick = { deviceNameDialog.value = true }
+            )
+
+            SettingsTile(
+                title = stringResource(R.string.theme),
+                value = when (currentTheme) {
+                    AppTheme.SYSTEM -> stringResource(R.string.system_default)
+                    AppTheme.LIGHT -> stringResource(R.string.light)
+                    AppTheme.DARK -> stringResource(R.string.dark)
+                },
+                onClick = { themeDialog.value = true }
             )
 
             SettingsTile(
@@ -256,6 +281,81 @@ fun EditTextDialog(
                             onValueChange(newValue)
                             onDismissRequest()
                         }) {
+                            Text(stringResource(R.string.save))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ThemeSelectionDialog(
+    showDialog: Boolean,
+    currentTheme: AppTheme,
+    onDismissRequest: () -> Unit,
+    onThemeSelected: (AppTheme) -> Unit
+) {
+    if (showDialog) {
+        val radioOptions = listOf(AppTheme.SYSTEM, AppTheme.LIGHT, AppTheme.DARK)
+        
+        Dialog(onDismissRequest = onDismissRequest) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(24.dp)
+                        .selectableGroup()
+                ) {
+                    Text(
+                        text = stringResource(R.string.theme),
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                        ),
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+
+                    radioOptions.forEach { theme ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(56.dp)
+                                .selectable(
+                                    selected = (theme == currentTheme),
+                                    onClick = { onThemeSelected(theme) },
+                                    role = Role.RadioButton
+                                )
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = (theme == currentTheme),
+                                onClick = null // null recommended for accessibility with screen readers
+                            )
+                            Text(
+                                text = when (theme) {
+                                    AppTheme.SYSTEM -> stringResource(R.string.system_default)
+                                    AppTheme.LIGHT -> stringResource(R.string.light)
+                                    AppTheme.DARK -> stringResource(R.string.dark)
+                                },
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(start = 16.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        TextButton(onClick = onDismissRequest) {
                             Text(stringResource(R.string.save))
                         }
                     }

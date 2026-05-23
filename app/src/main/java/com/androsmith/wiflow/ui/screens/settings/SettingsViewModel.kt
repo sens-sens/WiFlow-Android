@@ -18,9 +18,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.androsmith.wiflow.WiFlowApplication
 import com.androsmith.wiflow.data.UserPreferencesRepository
+import com.androsmith.wiflow.domain.AppTheme
 import com.androsmith.wiflow.domain.FtpServerConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 
@@ -57,10 +59,28 @@ class SettingsViewModel(
     private val _deviceName = MutableStateFlow<String>("")
     val deviceName: StateFlow<String> = _deviceName
 
+    private val _currentTheme = MutableStateFlow<AppTheme>(AppTheme.SYSTEM)
+    val currentTheme: StateFlow<AppTheme> = _currentTheme.asStateFlow()
+
     private var ftpServerConfig = FtpServerConfig()
 
     init {
         getConfig()
+        getTheme()
+    }
+
+    private fun getTheme() {
+        viewModelScope.launch {
+            userPreferencesRepository.appTheme.collect {
+                _currentTheme.value = it
+            }
+        }
+    }
+
+    fun updateTheme(theme: AppTheme) {
+        viewModelScope.launch {
+            userPreferencesRepository.updateTheme(theme)
+        }
     }
 
     fun changeDeviceName(value: String) {

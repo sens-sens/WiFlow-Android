@@ -72,11 +72,17 @@
     <string name="next">次へ</string>
     <string name="go_to_app">アプリへ</string>
     <string name="unknown">不明</string>
+    <string name="theme">テーマ</string>
+    <string name="theme_desc">アプリのカラー外観</string>
+    <string name="system_default">システムデフォルト</string>
+    <string name="light">ライト</string>
+    <string name="dark">ダーク</string>
 
     <!-- Foreground Service -->
     <string name="notification_channel_name">FTPサーバーの状態</string>
     <string name="notification_channel_desc">WiFlow FTPサーバーの状態を表示します</string>
     <string name="notification_title">WiFlow FTPサーバーが実行中です</string>
+    <string name="notification_stopping">WiFlow FTPサーバーを停止しています...</string>
     <string name="notification_text">%1$s でアクセス可能</string>
     <string name="stop">停止</string>
 </resources>
