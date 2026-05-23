@@ -46,6 +46,8 @@ import com.androsmith.wiflow.ui.screens.home.composables.NeumorphicButton
 import com.androsmith.wiflow.ui.screens.welcome.composables.BottomSection
 import kotlinx.coroutines.launch
 
+import androidx.compose.ui.res.stringResource
+
 @Composable
 fun WelcomeScreen(
     onNavigateToHome: () -> Unit, modifier: Modifier = Modifier
@@ -104,31 +106,31 @@ fun WelcomeScreen(
         ) { page ->
             when (page) {
                 0 -> GreetingContent(
-                    title = "Welcome to WiFlow!",
-                    content = "Learn how to use the app. This guide will show you how to use the app effectively.",
+                    title = stringResource(R.string.welcome_title),
+                    content = stringResource(R.string.welcome_content),
                     image = R.drawable.logo,
                     )
 
                 1 -> OnBoardingContent(
-                    title = "Step 1: Choose a Directory",
+                    title = stringResource(R.string.step1_title),
                     instructions = listOf(
-                        "To share files, select a folder from the Home screen.",
-                        "Tap 'Choose Directory' to pick the folder you want to share.",
-                        "You can update this folder anytime in Settings."
+                        stringResource(R.string.step1_content1),
+                        stringResource(R.string.step1_content2),
+                        stringResource(R.string.step1_content3)
                     ),
                     content = {
                         Column(
                             horizontalAlignment = Alignment.End
                         ) {
                             InfoTile(
-                                title = "Directory", value = "/", action = {
+                                title = stringResource(R.string.directory), value = "/", action = {
 
                                     Box(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Icon(
                                             painter = painterResource(R.drawable.right_2_svgrepo_com),
-                                            contentDescription = "Bullet point",
+                                            contentDescription = stringResource(R.string.bullet_point_desc),
                                             modifier = Modifier.size(24.dp)
 
                                         )
@@ -156,7 +158,7 @@ fun WelcomeScreen(
                                     )
                                     .padding(horizontal = 16.dp, vertical = 4.dp)
                             )
-                            Text("* Reference only",
+                            Text(stringResource(R.string.reference_only),
                                 style = TextStyle(
                                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = .5F),
                                     fontStyle = FontStyle.Italic
@@ -168,11 +170,11 @@ fun WelcomeScreen(
                 )
 
                 2 -> OnBoardingContent(
-                    title = "Step 2: Start and Stop the Server",
+                    title = stringResource(R.string.step2_title),
                     instructions = listOf(
-                        "Use the toggle button on the Home screen to start or stop the server.",
-                        "When the server is running, you'll see details like FTP Address, Username and Password",
-                        "Ensure your device is connected to the same Wi-Fi as the client."
+                        stringResource(R.string.step2_content1),
+                        stringResource(R.string.step2_content2),
+                        stringResource(R.string.step2_content3)
                     ),
                     content = {
                         Box(modifier = Modifier.fillMaxWidth().padding(horizontal = 28.dp)) {
@@ -184,7 +186,7 @@ fun WelcomeScreen(
 
 
                             }
-                            Text("* Reference only",
+                            Text(stringResource(R.string.reference_only),
                                 style = TextStyle(
                                     color = MaterialTheme.colorScheme.onBackground.copy(alpha = .5F),
                                     fontStyle = FontStyle.Italic
@@ -198,17 +200,17 @@ fun WelcomeScreen(
                 )
 
                 3 -> OnBoardingContent(
-                    title = "Step 3: Use an FTP Client",
+                    title = stringResource(R.string.step3_title),
                     instructions = listOf(
-                        "Open an FTP client (e.g., Windows Explorer).",
-                        "Enter the FTP address in this format: ftp://<FTP_ADDRESS>.",
-                        "Use the username and password shown on the Home screen.",
-                        "Start transferring files!"
+                        stringResource(R.string.step3_content1),
+                        stringResource(R.string.step3_content2),
+                        stringResource(R.string.step3_content3),
+                        stringResource(R.string.step3_content4)
                     ),
                     content = {
                         Image(
                             painter = painterResource(R.drawable.ftp_client),
-                            contentDescription = "FTP Client application screenshot",
+                            contentDescription = stringResource(R.string.ftp_client_screenshot_desc),
                             contentScale = ContentScale.FillHeight,
                             modifier = Modifier
 
@@ -234,13 +236,13 @@ fun WelcomeScreen(
                 )
 
                 4 -> GreetingContent(
-                    title = "You're Ready to Start!",
-                    content = "Follow these steps anytime to share files with WiFlow.",
+                    title = stringResource(R.string.ready_title),
+                    content = stringResource(R.string.ready_content),
                     image = R.drawable.logo,
 
                     )
 
-                else -> Text("Unknown")
+                else -> Text(stringResource(R.string.unknown))
             }
         }
     }
@@ -260,7 +262,7 @@ fun GreetingContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(image), contentDescription = "App logo"
+            painter = painterResource(image), contentDescription = stringResource(R.string.app_logo_desc)
         )
         Spacer(modifier = Modifier.height(36.dp))
         Text(

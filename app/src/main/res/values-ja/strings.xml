@@ -1,0 +1,78 @@
+<resources>
+    <string name="app_name">WiFlow</string>
+    <string name="home">ホーム</string>
+    <string name="settings">設定</string>
+    <string name="connection_info">接続情報</string>
+
+    <!-- Home Screen -->
+    <string name="server_running">サーバー実行中</string>
+    <string name="server_stopped">サーバー停止中</string>
+    <string name="enabled">有効</string>
+    <string name="disabled">無効</string>
+    <string name="start_stop_button_desc">サーバー開始/停止ボタン</string>
+    <string name="server_state_desc">サーバーの状態</string>
+    <string name="address">アドレス</string>
+    <string name="username">ユーザー名</string>
+    <string name="password">パスワード</string>
+    <string name="directory">ディレクトリ</string>
+    <string name="anonymous_login">匿名ログイン</string>
+    <string name="copy_address_desc">サーバーアドレスをコピー</string>
+    <string name="copied_address">サーバーアドレスをコピーしました</string>
+    <string name="show_password_desc">パスワードを表示</string>
+    <string name="hide_password_desc">パスワードを非表示</string>
+    <string name="choose_directory_desc">ディレクトリを選択</string>
+    <string name="choose_directory_toast">ディレクトリを選択してください！</string>
+    <string name="server_starting_toast">サーバーを起動しています...</string>
+    <string name="server_stopping_toast">サーバーを停止しています...</string>
+    <string name="notification_permission_required">フォアグラウンドサービスには通知権限が必要です。</string>
+
+    <!-- Settings Screen -->
+    <string name="username_label">ユーザー名</string>
+    <string name="password_label">パスワード</string>
+    <string name="username_desc">FTPサーバーのユーザー名</string>
+    <string name="password_desc">FTPサーバーのパスワード</string>
+    <string name="directory_desc">FTPサーバー用のフォルダ</string>
+    <string name="instructions">説明</string>
+    <string name="instructions_desc">アプリの使用ガイド</string>
+    <string name="edit_label">%1$s を編集</string>
+    <string name="new_label">新しい %1$s</string>
+    <string name="cancel">キャンセル</string>
+    <string name="save">保存</string>
+    <string name="manage_storage_permission_required">ディレクトリを選択するには「全ファイルへのアクセス」権限が必要です。</string>
+    <string name="storage_permission_denied">ストレージ権限が拒否されました</string>
+    <string name="go_back_desc">ホームに戻る</string>
+
+    <!-- Welcome Screen -->
+    <string name="welcome_title">WiFlowへようこそ！</string>
+    <string name="welcome_content">アプリの使い方を学びましょう。このガイドでは、アプリを効果的に使用する方法を説明します。</string>
+    <string name="step1_title">ステップ 1: ディレクトリを選択する</string>
+    <string name="step1_content1">ファイルを共有するには、ホーム画面からフォルダを選択してください。</string>
+    <string name="step1_content2">「ディレクトリを選択」をタップして、共有したいフォルダを選びます。</string>
+    <string name="step1_content3">このフォルダは設定からいつでも更新できます。</string>
+    <string name="step2_title">ステップ 2: サーバーの開始と停止</string>
+    <string name="step2_content1">ホーム画面の切り替えボタンを使用して、サーバーを開始または停止します。</string>
+    <string name="step2_content2">サーバーが動作しているときは、FTPアドレス、ユーザー名、パスワードなどの詳細が表示されます。</string>
+    <string name="step2_content3">デバイスがクライアントと同じWi-Fiに接続されていることを確認してください。</string>
+    <string name="step3_title">ステップ 3: FTPクライアントを使用する</string>
+    <string name="step3_content1">FTPクライアント（例：Windows エクスプローラー）を開きます。</string>
+    <string name="step3_content2">この形式でFTPアドレスを入力します：ftp://&lt;FTP_ADDRESS&gt;</string>
+    <string name="step3_content3">ホーム画面に表示されているユーザー名とパスワードを使用します。</string>
+    <string name="step3_content4">ワイヤレスでのファイル転送を開始しましょう！</string>
+    <string name="ready_title">準備完了です！</string>
+    <string name="ready_content">WiFlowでファイルを共有する際は、いつでもこれらの手順に従ってください。</string>
+    <string name="reference_only">* 参考のみ</string>
+    <string name="app_logo_desc">アプリロゴ</string>
+    <string name="bullet_point_desc">箇条書き</string>
+    <string name="ftp_client_screenshot_desc">FTPクライアントアプリのスクリーンショット</string>
+    <string name="back">戻る</string>
+    <string name="next">次へ</string>
+    <string name="go_to_app">アプリへ</string>
+    <string name="unknown">不明</string>
+
+    <!-- Foreground Service -->
+    <string name="notification_channel_name">FTPサーバーの状態</string>
+    <string name="notification_channel_desc">WiFlow FTPサーバーの状態を表示します</string>
+    <string name="notification_title">WiFlow FTPサーバーが実行中です</string>
+    <string name="notification_text">%1$s でアクセス可能</string>
+    <string name="stop">停止</string>
+</resources>

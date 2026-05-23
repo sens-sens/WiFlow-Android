@@ -39,14 +39,14 @@ fun SettingsAppBar(
                     Icon(
                         Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
                         tint = MaterialTheme.colorScheme.onBackground,
-                        contentDescription = "Go back to home",
+                        contentDescription = stringResource(R.string.go_back_desc),
                     )
                 }
             }
         },
         title = {
             Text(
-                "Settings",
+                stringResource(R.string.settings),
 
             )
         },

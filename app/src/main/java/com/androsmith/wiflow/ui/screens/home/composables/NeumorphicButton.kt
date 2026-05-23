@@ -41,6 +41,8 @@ import com.androsmith.wiflow.ui.theme.Gray10
 import com.androsmith.wiflow.ui.theme.Gray80
 import com.androsmith.wiflow.ui.theme.Gray90
 
+import androidx.compose.ui.res.stringResource
+
 @Composable
 fun NeumorphicButton(
     onClick : () -> Unit,
@@ -97,7 +99,8 @@ fun NeumorphicButton(
         targetValue = if (pressed) blue else blue10
     )
 
-
+    val startStopDesc = stringResource(R.string.start_stop_button_desc)
+    val serverStateDesc = stringResource(R.string.server_state_desc)
 
 
     Box(
@@ -109,7 +112,7 @@ fun NeumorphicButton(
                 indication = null,
                 interactionSource = interactionSource
             ).semantics {
-                contentDescription = "Start / Stop server Button"
+                contentDescription = startStopDesc
             }
         ,
 
@@ -158,7 +161,7 @@ fun NeumorphicButton(
                     painter = painterResource(R.drawable.flash),
                     tint = color,
 
-                    contentDescription = "Server state",
+                    contentDescription = serverStateDesc,
 
                     modifier = Modifier.size(52.dp - padding),
                 )

@@ -3,4 +3,76 @@
     <string name="home">Home</string>
     <string name="settings">Settings</string>
     <string name="connection_info">Connection Info</string>
+
+    <!-- Home Screen -->
+    <string name="server_running">Server Running</string>
+    <string name="server_stopped">Server Stopped</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="start_stop_button_desc">Start / Stop server Button</string>
+    <string name="server_state_desc">Server state</string>
+    <string name="address">Address</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="directory">Directory</string>
+    <string name="anonymous_login">Anonymous Login</string>
+    <string name="copy_address_desc">Copy server address</string>
+    <string name="copied_address">Copied server address</string>
+    <string name="show_password_desc">Show password</string>
+    <string name="hide_password_desc">Hide password</string>
+    <string name="choose_directory_desc">Choose directory</string>
+    <string name="choose_directory_toast">Choose a directory!</string>
+    <string name="server_starting_toast">Server starting...</string>
+    <string name="server_stopping_toast">Server stopping...</string>
+    <string name="notification_permission_required">Notification permission is required for the foreground service.</string>
+
+    <!-- Settings Screen -->
+    <string name="username_label">Username</string>
+    <string name="password_label">Password</string>
+    <string name="username_desc">Username for FTP Server</string>
+    <string name="password_desc">Password for FTP Server</string>
+    <string name="directory_desc">Folder for creating FTP Server</string>
+    <string name="instructions">Instructions</string>
+    <string name="instructions_desc">Instruction guide for using the app</string>
+    <string name="edit_label">Edit %1$s</string>
+    <string name="new_label">New %1$s</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="manage_storage_permission_required">Manage All Files Access permission is required to select a directory.</string>
+    <string name="storage_permission_denied">Storage Permission Denied</string>
+    <string name="go_back_desc">Go back to home</string>
+
+    <!-- Welcome Screen -->
+    <string name="welcome_title">Welcome to WiFlow!</string>
+    <string name="welcome_content">Learn how to use the app. This guide will show you how to use the app effectively.</string>
+    <string name="step1_title">Step 1: Choose a Directory</string>
+    <string name="step1_content1">To share files, select a folder from the Home screen.</string>
+    <string name="step1_content2">Tap \'Choose Directory\' to pick the folder you want to share.</string>
+    <string name="step1_content3">You can update this folder anytime in Settings.</string>
+    <string name="step2_title">Step 2: Start and Stop the Server</string>
+    <string name="step2_content1">Use the toggle button on the Home screen to start or stop the server.</string>
+    <string name="step2_content2">When the server is running, you\'ll see details like FTP Address, Username and Password</string>
+    <string name="step2_content3">Ensure your device is connected to the same Wi-Fi as the client.</string>
+    <string name="step3_title">Step 3: Use an FTP Client</string>
+    <string name="step3_content1">Open an FTP client (e.g., Windows Explorer).</string>
+    <string name="step3_content2">Enter the FTP address in this format: ftp://&lt;FTP_ADDRESS&gt;.</string>
+    <string name="step3_content3">Use the username and password shown on the Home screen.</string>
+    <string name="step3_content4">Start transferring files!</string>
+    <string name="ready_title">You\'re Ready to Start!</string>
+    <string name="ready_content">Follow these steps anytime to share files with WiFlow.</string>
+    <string name="reference_only">* Reference only</string>
+    <string name="app_logo_desc">App logo</string>
+    <string name="bullet_point_desc">Bullet point</string>
+    <string name="ftp_client_screenshot_desc">FTP Client application screenshot</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="go_to_app">Go to App</string>
+    <string name="unknown">Unknown</string>
+
+    <!-- Foreground Service -->
+    <string name="notification_channel_name">FTP Server Status</string>
+    <string name="notification_channel_desc">Shows the status of the WiFlow FTP server</string>
+    <string name="notification_title">WiFlow FTP Server Running</string>
+    <string name="notification_text">Access at %1$s</string>
+    <string name="stop">Stop</string>
 </resources>

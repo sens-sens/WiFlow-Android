@@ -18,6 +18,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+import androidx.compose.ui.res.stringResource
+import com.androsmith.wiflow.R
+
 @Composable
 fun StatusIndicator(
     enabled: Boolean,
@@ -57,7 +60,7 @@ fun StatusIndicator(
                         )
                 )
                 Spacer(Modifier.width(8.dp))
-                Text("Server Running",
+                Text(stringResource(R.string.server_running),
                     color = MaterialTheme
                         .colorScheme
                         .onTertiaryContainer
@@ -94,7 +97,7 @@ fun StatusIndicator(
                             )
                     )
                     Spacer(Modifier.width(8.dp))
-                    Text("Server Stopped",
+                    Text(stringResource(R.string.server_stopped),
                         color = MaterialTheme
                             .colorScheme
                             .onErrorContainer

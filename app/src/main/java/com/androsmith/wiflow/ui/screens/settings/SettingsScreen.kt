@@ -23,13 +23,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.androsmith.wiflow.ui.screens.settings.LaunchIntent.ManageStorageRequest
-import com.androsmith.wiflow.ui.screens.settings.LaunchIntent.PermissionRequest
+import com.androsmith.wiflow.R
 import com.androsmith.wiflow.ui.screens.settings.composables.SettingsAppBar
 
 @Composable
@@ -69,8 +69,8 @@ fun SettingsScreen(
 
             when (intent) {
                 is LaunchIntent.OpenDirectoryIntent -> openDirectoryLauncher.launch(intent.intent)
-                is PermissionRequest -> storagePermissionLauncher.launch(intent.permissions)
-                is ManageStorageRequest -> manageStorageLauncher.launch(intent.intent)
+                is LaunchIntent.PermissionRequest -> storagePermissionLauncher.launch(intent.permissions)
+                is LaunchIntent.ManageStorageRequest -> manageStorageLauncher.launch(intent.intent)
             }
             viewModel.onIntentLaunched()
         }
@@ -103,7 +103,7 @@ fun SettingsScreen(
 
             EditTextDialog(
                 showDialog = usernameDialog.value,
-                label = "Username",
+                label = stringResource(R.string.username_label),
                 currentValue = username.value,
                 onDismissRequest = { usernameDialog.value = false },
                 onValueChange = { newUsername ->
@@ -113,7 +113,7 @@ fun SettingsScreen(
 
             EditTextDialog(
                 showDialog = passwordDialog.value,
-                label = "Password",
+                label = stringResource(R.string.password_label),
                 currentValue = password.value,
                 onDismissRequest = { passwordDialog.value = false },
                 onValueChange = { newPassword ->
@@ -123,25 +123,25 @@ fun SettingsScreen(
 
 
             SettingsTile(
-                title = "Username",
-                value = "Username for FTP Server",
+                title = stringResource(R.string.username),
+                value = stringResource(R.string.username_desc),
                 onClick = { usernameDialog.value = true }
             )
 
             SettingsTile(
-                title = "Password",
-                value = "Password for FTP Server",
+                title = stringResource(R.string.password),
+                value = stringResource(R.string.password_desc),
                 onClick = { passwordDialog.value = true }
             )
 
             SettingsTile(
-                title = "Directory",
-                value = "Folder for creating FTP Server",
+                title = stringResource(R.string.directory),
+                value = stringResource(R.string.directory_desc),
                 onClick = { viewModel.chooseDirectory(context) }
             )
             SettingsTile(
-                title = "Instructions",
-                value = "Instruction guide for using the app",
+                title = stringResource(R.string.instructions),
+                value = stringResource(R.string.instructions_desc),
                 onClick = onInstructionPageClicked
             )
 
@@ -205,7 +205,7 @@ fun EditTextDialog(
     onDismissRequest: () -> Unit,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    label: String = "Value",
+    label: String = stringResource(R.string.unknown),
 ) {
     if (showDialog) {
         var newValue by remember { mutableStateOf(currentValue) }
@@ -223,7 +223,7 @@ fun EditTextDialog(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Edit $label",
+                        text = stringResource(R.string.edit_label, label),
                         style = TextStyle(
                             fontSize = 20.sp,
                         ),
@@ -233,7 +233,7 @@ fun EditTextDialog(
                     OutlinedTextField(
                         value = newValue,
                         onValueChange = { newValue = it },
-                        label = { Text("New $label") },
+                        label = { Text(stringResource(R.string.new_label, label)) },
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -244,14 +244,14 @@ fun EditTextDialog(
                         horizontalArrangement = Arrangement.End
                     ) {
                         TextButton(onClick = onDismissRequest) {
-                            Text("Cancel")
+                            Text(stringResource(R.string.cancel))
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Button(onClick = {
                             onValueChange(newValue)
                             onDismissRequest()
                         }) {
-                            Text("Save")
+                            Text(stringResource(R.string.save))
                         }
                     }
                 }

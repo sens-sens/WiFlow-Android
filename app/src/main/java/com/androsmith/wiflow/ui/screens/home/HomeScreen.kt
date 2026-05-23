@@ -1,6 +1,8 @@
 package com.androsmith.wiflow.ui.screens.home
 
 
+import android.Manifest
+import android.os.Build
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -18,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.androsmith.wiflow.R
 import com.androsmith.wiflow.ui.screens.home.composables.ConnectionInfoCard
 import com.androsmith.wiflow.ui.screens.home.composables.HomeAppBar
 import com.androsmith.wiflow.ui.screens.home.composables.NeumorphicButton
@@ -43,6 +46,17 @@ fun HomeScreen(
         factory = SettingsViewModel.Factory
     )
     val context = LocalContext.current
+
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { isGranted ->
+            if (isGranted) {
+                homeViewModel.toggleServer(context)
+            } else {
+                Toast.makeText(context, context.getString(R.string.notification_permission_required), Toast.LENGTH_SHORT).show()
+            }
+        }
+    )
 
     val manageStorageLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -102,9 +116,12 @@ fun HomeScreen(
 
             NeumorphicButton(
                 onClick = {
-
-                    homeViewModel.toggleServer(context)
-                          },
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !uiState.isRunning) {
+                        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    } else {
+                        homeViewModel.toggleServer(context)
+                    }
+                },
                 pressed = uiState.isRunning,
                 modifier = Modifier.padding(bottom = 56.dp)
             )
@@ -117,6 +134,8 @@ fun HomeScreen(
                 password = uiState.config.password,
                 serverAddress = uiState.address,
                 isRunning = uiState.isRunning,
+                isAnonymousEnabled = uiState.config.isAnonymousEnabled,
+                onToggleAnonymous = { homeViewModel.toggleAnonymousAccess(it) },
                 directory = uiState.config.rootDirectory.replace(
                     "/storage/emulated/0",""
                 ),
