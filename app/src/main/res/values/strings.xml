@@ -7,6 +7,8 @@
     <!-- Home Screen -->
     <string name="server_running">Server Running</string>
     <string name="server_stopped">Server Stopped</string>
+    <string name="server_starting">Starting...</string>
+    <string name="server_stopping">Stopping...</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
     <string name="start_stop_button_desc">Start / Stop server Button</string>
@@ -15,6 +17,8 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="directory">Directory</string>
+    <string name="device_name">Device Name</string>
+    <string name="device_name_desc">Friendly name for local network access (e.g., wiflow.local)</string>
     <string name="anonymous_login">Anonymous Login</string>
     <string name="copy_address_desc">Copy server address</string>
     <string name="copied_address">Copied server address</string>
