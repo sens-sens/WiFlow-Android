@@ -7,6 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +58,7 @@ fun ConnectionInfoCard(
     password: String,
     isRunning: Boolean,
     isAnonymousEnabled: Boolean,
+    deviceName: String,
     onToggleAnonymous: (Boolean) -> Unit,
     onChooseDirectory: () -> Unit,
     modifier: Modifier = Modifier,
@@ -136,14 +138,31 @@ fun ConnectionInfoCard(
                         AnimatedVisibility(
                             visible = isRunning
                         ) {
+                            val localAddress = "ftp://$deviceName.local:${serverAddress.substringAfterLast(":")}"
+                            
                             InfoTile(
                                 title = stringResource(R.string.address),
-                                value = serverAddress,
+                                valueContent = {
+                                    Column {
+                                        Text(
+                                            localAddress, style = TextStyle(
+                                                fontSize = 16.sp, color = MaterialTheme.colorScheme.primary
+                                            )
+                                        )
+                                        Spacer(Modifier.height(4.dp))
+                                        Text(
+                                            serverAddress, style = TextStyle(
+                                                fontSize = 12.sp, 
+                                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = .4f)
+                                            )
+                                        )
+                                    }
+                                },
                                 action = {
                                     IconButton(
                                         onClick = {
                                             val clipData =
-                                                ClipData.newPlainText("address", serverAddress)
+                                                ClipData.newPlainText("address", localAddress)
                                             val clipEntry = ClipEntry(clipData)
                                             clipboardManager.setClip(clipEntry)
 
@@ -249,9 +268,10 @@ fun ConnectionInfoCard(
 fun InfoTile(
 
     title: String,
-    value: String,
+    value: String = "",
     modifier: Modifier = Modifier,
     action: (@Composable() () -> Unit)? = null,
+    valueContent: (@Composable() () -> Unit)? = null,
 ) {
     Column {
         Row(
@@ -263,6 +283,7 @@ fun InfoTile(
             Column(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top,
+                modifier = Modifier.weight(1f)
             ) {
                 Text(
                     title, style = TextStyle(
@@ -271,14 +292,17 @@ fun InfoTile(
                     )
                 )
                 Spacer(Modifier.height(10.dp))
-                Text(
-                    value, style = TextStyle(
-                        fontSize = 16.sp, color = MaterialTheme.colorScheme.inverseSurface
+                if (valueContent != null) {
+                    valueContent()
+                } else {
+                    Text(
+                        value, style = TextStyle(
+                            fontSize = 16.sp, color = MaterialTheme.colorScheme.inverseSurface
+                        )
                     )
-                )
+                }
 
             }
-            Spacer(Modifier.weight(1f))
             if (action != null) {
 
                 action()
