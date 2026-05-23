@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.androsmith.wiflow.R
 import com.androsmith.wiflow.WiFlowApplication
 import com.androsmith.wiflow.data.UserPreferencesRepository
 import com.androsmith.wiflow.domain.AppTheme
@@ -160,18 +161,18 @@ class SettingsViewModel(
                 _launchIntent.value = LaunchIntent.OpenDirectoryIntent(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE))
             } else {
                 // Permission not granted, show a toast or handle the failure
-                _toastMessage.value = "Manage All Files Access permission is required to select a directory."
+                _toastMessage.value = context.getString(R.string.manage_storage_permission_required)
             }
         }
     }
 
 
-    fun handleStoragePermissionResult(permissions: Map<String, Boolean>) {
+    fun handleStoragePermissionResult(permissions: Map<String, Boolean>, context: android.content.Context) {
         if (permissions.all { it.value }) {
             _launchIntent.value =
                 LaunchIntent.OpenDirectoryIntent(Intent(Intent.ACTION_OPEN_DOCUMENT_TREE))
         } else {
-            _toastMessage.value = "Storage Permission Denied"
+            _toastMessage.value = context.getString(R.string.storage_permission_denied)
         }
     }
 

@@ -41,7 +41,7 @@ fun SettingsScreen(
 
     val storagePermissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            viewModel.handleStoragePermissionResult(permissions)
+            viewModel.handleStoragePermissionResult(permissions, context)
         }
 
     val openDirectoryLauncher =
