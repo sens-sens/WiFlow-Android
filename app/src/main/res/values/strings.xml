@@ -44,6 +44,7 @@
     <string name="save">Save</string>
     <string name="manage_storage_permission_required">Manage All Files Access permission is required to select a directory.</string>
     <string name="storage_permission_denied">Storage Permission Denied</string>
+    <string name="no_file_manager_found">No file manager found to pick a directory. Please install a files app.</string>
     <string name="go_back_desc">Go back to home</string>
 
     <!-- Welcome Screen -->

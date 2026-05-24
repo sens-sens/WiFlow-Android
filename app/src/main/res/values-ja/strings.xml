@@ -44,6 +44,7 @@
     <string name="save">保存</string>
     <string name="manage_storage_permission_required">ディレクトリを選択するには「全ファイルへのアクセス」権限が必要です。</string>
     <string name="storage_permission_denied">ストレージ権限が拒否されました</string>
+    <string name="no_file_manager_found">ディレクトリを選択するためのファイルマネージャーが見つかりませんでした。ファイルアプリをインストールしてください。</string>
     <string name="go_back_desc">ホームに戻る</string>
 
     <!-- Welcome Screen -->

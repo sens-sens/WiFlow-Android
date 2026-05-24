@@ -82,10 +82,14 @@ fun HomeScreen(
 
     LaunchedEffect(launchIntent) {
         viewModel.launchIntent.value?.let { intent ->
-            when (intent) {
-                is LaunchIntent.OpenDirectoryIntent -> openDirectoryLauncher.launch(intent.intent)
-                is PermissionRequest -> storagePermissionLauncher.launch(intent.permissions)
-                is ManageStorageRequest -> manageStorageLauncher.launch(intent.intent)
+            try {
+                when (intent) {
+                    is LaunchIntent.OpenDirectoryIntent -> openDirectoryLauncher.launch(intent.intent)
+                    is LaunchIntent.PermissionRequest -> storagePermissionLauncher.launch(intent.permissions)
+                    is LaunchIntent.ManageStorageRequest -> manageStorageLauncher.launch(intent.intent)
+                }
+            } catch (e: android.content.ActivityNotFoundException) {
+                Toast.makeText(context, context.getString(R.string.no_file_manager_found), Toast.LENGTH_LONG).show()
             }
             viewModel.onIntentLaunched()
         }
